@@ -1,0 +1,39 @@
+﻿@page
+@model IndexModel
+@{
+}
+
+<h1>Teams</h1>
+
+<form class="d-flex">
+    <div class="form-group pr-2">
+        <label class="col-form-label" asp-for="FavoriteTeam" class="control-label">Favorite:</label>
+        <select class="form-control" asp-for="FavoriteTeam" asp-items="Model.AllTeams" onchange="this.form.submit();">
+            <option value="">None</option>
+        </select>
+    </div>
+</form>
+
+<section class="grid">
+    @foreach (Conference Conference in Model.Conferences)
+    {
+        <h3 class="pt-2">@Conference.Name</h3>
+
+        foreach (Division Division in Model.MatchingDivision(Conference.ConferenceId))
+        {
+            <div class="d-flex bg-primary text-white p-1">@Division.Name</div>
+
+            foreach (Team Team in Model.MatchingTeams(Division.DivisionId))
+            {
+                <a class="@(Team.TeamId == Model.FavoriteTeam ? "d-flex favorite p1" : "d-flex p1")" asp-page="Team" asp-route-id="@Team.TeamId">
+
+                    <div class="p-1" style="flex:0 0 25%">@Team.Location</div>
+                    <div class="p-1" style="flex:0 0 25%">@Team.Name</div>
+                    <div class="p-1" style="flex:0 0 5%">@Team.Win</div>
+                    <div class="p-1" style="flex:0 0 5%">@Team.Loss</div>
+                    <div class="p-1" style="flex:0 0 5%">@Team.Tie</div>
+                </a>
+            }
+        }
+    }
+</section>
